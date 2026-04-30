@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TableVista — Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <div class="brand">TableVista</div>
+        <div class="tagline">Reservation Platform</div>
+    </div>
+
+    <div class="sidebar-avatar">
+        <div class="avatar-circle" id="avatarInitial"></div>
+        <div class="avatar-info">
+            <div class="name" id="sidebarUsername">Loading…</div>
+            <span class="role-badge client" id="sidebarRole">CLIENT</span>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section-label">Navigation</div>
+
+        <a class="nav-item active" href="dashboard.html">
+            <span class="nav-icon">⊞</span> Dashboard
+        </a>
+        <a class="nav-item" href="#" onclick="goToTables()">
+            <span class="nav-icon">🍽️</span> Browse Tables
+        </a>
+        <a class="nav-item" href="#" onclick="goToReservations()">
+            <span class="nav-icon">📅</span> My Reservations
+        </a>
+        <a class="nav-item" href="#" onclick="goToReservations()">
+            <span class="nav-icon">➕</span> New Reservation
+        </a>
+
+        <div class="nav-section-label" style="margin-top:8px">Account</div>
+        <a class="nav-item" href="#" onclick="showProfile()">
+            <span class="nav-icon">👤</span> Profile
+        </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+        <button class="logout-btn" onclick="logout()">
+            <span>⎋</span> Sign Out
+        </button>
+    </div>
+</div>
+
+<!-- OVERLAY (mobile) -->
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- TOPBAR -->
+<div class="topbar" id="topbar">
+    <div class="topbar-left">
+        <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+        <div class="page-title">TableVista / <span>Dashboard</span></div>
+    </div>
+    <div class="topbar-right">
+        <div class="time-display" id="clock">—</div>
+        <div class="status-dot" title="Auth Service Online"></div>
+    </div>
+</div>
+
+<!-- MAIN -->
+<!-- MAIN -->
+<div class="main" id="main">
+
+    <!-- Welcome banner -->
+    <div class="welcome-banner fade-in">
+        <div class="welcome-text">
+            <h1>Welcome back, <span id="welcomeName">…</span></h1>
+            <p>Manage your reservations and explore available tables from your personal dashboard.</p>
+        </div>
+        <div class="welcome-decoration">🍷</div>
+    </div>
+
+    <!-- Quick actions -->
+    <div class="section-title fade-in delay-1">Quick Actions</div>
+
+    <div class="actions-grid fade-in delay-2">
+        <div class="action-card tables" onclick="goToTables()">
+            <span class="card-arrow">↗</span>
+            <span class="card-icon">🍽️</span>
+            <h3>Browse Tables</h3>
+            <p>Explore available tables, check capacity, location and book the perfect spot for your occasion.</p>
+            <span class="tag">Restaurant Service</span>
+        </div>
+        <div class="action-card reservations" onclick="goToReservations()">
+            <span class="card-arrow">↗</span>
+            <span class="card-icon">📅</span>
+            <h3>My Reservations</h3>
+            <p>View upcoming and past reservations, modify booking details or cancel a reservation.</p>
+            <span class="tag">Reservation Service</span>
+        </div>
+        <div class="action-card new-res" onclick="goToReservations()">
+            <span class="card-arrow">↗</span>
+            <span class="card-icon">➕</span>
+            <h3>New Reservation</h3>
+            <p>Book a table right now — pick a date, time, and number of guests in just a few clicks.</p>
+            <span class="tag" style="background:rgba(90,191,138,0.15);color:#5abf8a;">Quick Book</span>
+        </div>
+        <div class="action-card support" onclick="showToast('Support chat coming soon')">
+            <span class="card-arrow">↗</span>
+            <span class="card-icon">💬</span>
+            <h3>Help & Support</h3>
+            <p>Have a question about your booking? Reach our team directly for fast assistance.</p>
+            <span class="tag" style="background:rgba(224,90,90,0.12);color:#e05a5a;">Support</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal-overlay" id="profileModal" onclick="closeProfileOnOverlay(event)">
+    <div class="modal">
+        <button class="modal-close" onclick="closeProfile()">✕</button>
+        <div class="modal-avatar" id="modalAvatar">?</div>
+        <div class="modal-name" id="modalName">—</div>
+        <div class="modal-role">
+            <span class="role-badge client" id="modalRole">CLIENT</span>
+        </div>
+        <hr>
+        <div class="info-row">
+            <span class="key">Full Name</span>
+            <span class="val" id="modalUsername">—</span>
+        </div>
+        <div class="info-row">
+            <span class="key">Email</span>
+            <span class="val" id="modalEmail">—</span>
+        </div>
+        <div class="info-row">
+            <span class="key">Role</span>
+            <span class="val" id="modalRoleText">—</span>
+        </div>
+        <div class="info-row">
+            <span class="key">User ID</span>
+            <span class="val" id="modalId">—</span>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

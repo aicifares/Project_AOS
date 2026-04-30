@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TableVista — Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-body">
+
+<div class="auth-card">
+
+    <div class="auth-logo">
+        <div class="brand">TableVista</div>
+        <div class="tagline">Reservation Platform</div>
+    </div>
+
+    <div class="auth-divider"></div>
+
+    <div class="auth-title">Create account</div>
+<div class="auth-subtitle">Join TableVista and start booking tables</div>
+
+<div class="input-row">
+    <div class="input-group">
+        <label>First Name</label>
+        <input type="text" id="first_name" placeholder="Your first name...">
+    </div>
+    <div class="input-group">
+        <label>Last Name</label>
+        <input type="text" id="last_name" placeholder="Your last name...">
+    </div>
+</div>
+
+<div class="input-group">
+    <label>Email</label>
+    <input type="email" id="email" placeholder="Your email...">
+</div>
+
+<div class="input-group">
+    <label>Password</label>
+    <input type="password" id="password" placeholder="••••••••">
+</div>
+
+<button class="auth-btn" onclick="register()">Create Account</button>
+
+<p class="auth-message" id="message"></p>
+
+<div class="auth-footer">
+    Already have an account? <a href="login.html">Sign in</a>
+</div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
