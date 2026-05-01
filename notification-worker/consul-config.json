@@ -2,12 +2,8 @@
   "services": [
     {
       "name": "notification-worker",
-      "port": 8084,
-      "check": {
-        "tcp": "notification_worker:8084",
-        "interval": "10s",
-        "timeout": "3s"
-      }
+      "id": "notification-worker-1",
+      "port": 8084
     }
   ]
 }
