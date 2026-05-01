@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détail de la Table</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .navbar {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 { font-size: 22px; }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            font-size: 30px;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 16px;
+        }
+
+        .info-row:last-of-type { border-bottom: none; }
+
+        .info-label {
+            color: #888;
+            font-weight: bold;
+        }
+
+        .info-value { color: #333; }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .badge.disponible   { background: #d5f5e3; color: #27ae60; }
+        .badge.indisponible { background: #fadbd8; color: #e74c3c; }
+
+        .btn-reserver {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 25px;
+        }
+
+        .btn-reserver:hover { background: #c0392b; }
+
+        .btn-retour {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-retour:hover { background: #7f8c8d; }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <h1>🍽️ Restaurant</h1>
+        <div>
+            <a href="/">Accueil</a>
+            <a href="#">Mon Compte</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card" id="card-content">
+            <p class="loading">Chargement...</p>
+        </div>
+    </div>
+
+    <script>
+        // Récupérer l'id depuis l'URL
+        const urlParts = window.location.pathname.split('/');
+        const tableId  = urlParts.filter(part => part !== '').find(part => !isNaN(part));
+        window.onload = async function() {
+            try {
+                const response = await fetch(`/api/tables/${tableId}/`);
+                const data     = await response.json();
+
+                if (data.status !== 'success') {
+                    document.getElementById('card-content').innerHTML =
+                        '<p class="loading">Table non trouvée 😕</p>';
+                    return;
+                }
+
+                const table = data.data;
+
+                document.getElementById('card-content').innerHTML = `
+                    <h2>🪑 Table ${table.numero}</h2>
+
+                    <div class="info-row">
+                        <span class="info-label">Numéro</span>
+                        <span class="info-value">${table.numero}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Capacité</span>
+                        <span class="info-value">${table.capacite} personnes</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Localisation</span>
+                        <span class="info-value">${table.localisation}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Statut</span>
+                        <span class="info-value">
+                            <span class="badge ${table.statut}">${table.statut}</span>
+                        </span>
+                    </div>
+
+                    <button class="btn-reserver"
+                        onclick="reserver(${table.id})">
+                        📅 Réserver cette table
+                    </button>
+                    <button class="btn-retour"
+                        onclick="window.location.href='/'">
+                        ← Retour à l'accueil
+                    </button>
+                `;
+
+            } catch (error) {
+                document.getElementById('card-content').innerHTML =
+                    '<p class="loading">Erreur de connexion 😕</p>';
+            }
+        }
+
+        function reserver(tableId) {
+            // Rediriger vers le service de réservation (Membre 3)
+            window.location.href =
+                `http://localhost:8083/reservations/creer/?table_id=${tableId}`;
+        }
+    </script>
+
+</body>
+</html>

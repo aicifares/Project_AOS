@@ -1,0 +1,164 @@
+version: '3.9'
+
+services:
+
+  # ─── Traefik ──────────────────────────────────────────────────────────────
+  traefik:
+    image: traefik:v3.0
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  # ─── Consul ───────────────────────────────────────────────────────────────
+  consul:
+    image: consul:1.15
+    ports:
+      - "8500:8500"
+    command: agent -dev -client=0.0.0.0
+
+  # ─── RabbitMQ ─────────────────────────────────────────────────────────────
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  # ─── Bases de données ─────────────────────────────────────────────────────
+  db_auth:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_auth_data:/var/lib/postgresql/data
+
+  db_restaurant:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: restaurant_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_restaurant_data:/var/lib/postgresql/data
+
+  db_reservation:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: reservation_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_reservation_data:/var/lib/postgresql/data
+
+  db_notification:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_notification_data:/var/lib/postgresql/data
+
+  # ─── Auth Service ─────────────────────────────────────────────────────────
+  auth_service:
+    build: ./auth-service
+    ports:
+      - "8081:8081"
+    environment:
+      DB_HOST: db_auth
+      DB_NAME: auth_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      SECRET_KEY: secret-auth
+    depends_on:
+      - db_auth
+      - consul
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth.rule=PathPrefix(`/auth`)"
+      - "traefik.http.services.auth.loadbalancer.server.port=8081"
+
+  # ─── Restaurant Service ───────────────────────────────────────────────────
+  restaurant_service:
+    build: ./restaurant-service
+    ports:
+      - "8082:8082"
+    environment:
+      DB_HOST: db_restaurant
+      DB_NAME: restaurant_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      SECRET_KEY: secret-restaurant
+    depends_on:
+      - db_restaurant
+      - consul
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.restaurant.rule=PathPrefix(`/api/tables`)"
+      - "traefik.http.services.restaurant.loadbalancer.server.port=8082"
+
+  # ─── Reservation Service ──────────────────────────────────────────────────
+  reservation_service:
+    build: ./reservation-service
+    ports:
+      - "8083:8083"
+    environment:
+      DB_HOST: db_reservation
+      DB_NAME: reservation_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      SECRET_KEY: secret-reservation
+      RABBITMQ_HOST: rabbitmq
+    depends_on:
+      - db_reservation
+      - rabbitmq
+      - consul
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.reservation.rule=PathPrefix(`/api/reservations`)"
+      - "traefik.http.services.reservation.loadbalancer.server.port=8083"
+
+  # ─── Notification Worker ──────────────────────────────────────────────────
+  notification_worker:
+    build: ./notification-worker
+    ports:
+      - "8084:8084"
+    environment:
+      DB_HOST: db_notification
+      DB_NAME: notification_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      RABBITMQ_HOST: rabbitmq
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      EMAIL_FROM: ${EMAIL_FROM}
+    depends_on:
+      - db_notification
+      - rabbitmq
+      - consul
+
+  # ─── Frontend ─────────────────────────────────────────────────────────────
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+
+volumes:
+  db_auth_data:
+  db_restaurant_data:
+  db_reservation_data:
+  db_notification_data:
+  rabbitmq_data:

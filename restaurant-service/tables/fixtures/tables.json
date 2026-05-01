@@ -1,0 +1,90 @@
+[
+  {
+    "model": "tables.table",
+    "pk": 1,
+    "fields": {
+      "numero": "T1",
+      "capacite": 2,
+      "localisation": "interieur",
+      "statut": "disponible",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tables.table",
+    "pk": 2,
+    "fields": {
+      "numero": "T2",
+      "capacite": 4,
+      "localisation": "terrasse",
+      "statut": "disponible",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tables.table",
+    "pk": 3,
+    "fields": {
+      "numero": "T3",
+      "capacite": 6,
+      "localisation": "salon_prive",
+      "statut": "disponible",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tables.table",
+    "pk": 4,
+    "fields": {
+      "numero": "T4",
+      "capacite": 4,
+      "localisation": "interieur",
+      "statut": "disponible",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tables.table",
+    "pk": 5,
+    "fields": {
+      "numero": "T5",
+      "capacite": 8,
+      "localisation": "terrasse",
+      "statut": "disponible",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tables.table",
+    "pk": 6,
+    "fields": {
+      "numero": "T6",
+      "capacite": 2,
+      "localisation": "terrasse",
+      "statut": "disponible",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tables.table",
+    "pk": 7,
+    "fields": {
+      "numero": "T7",
+      "capacite": 6,
+      "localisation": "interieur",
+      "statut": "disponible",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "tables.table",
+    "pk": 8,
+    "fields": {
+      "numero": "T8",
+      "capacite": 10,
+      "localisation": "salon_prive",
+      "statut": "indisponible",
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  }
+]
