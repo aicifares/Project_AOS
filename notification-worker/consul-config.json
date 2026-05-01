@@ -1,37 +1,10 @@
 {
   "services": [
     {
-      "name": "auth-service",
-      "port": 8081,
-      "check": {
-        "http": "http://auth_service:8081/auth/",
-        "interval": "10s",
-        "timeout": "3s"
-      }
-    },
-    {
-      "name": "restaurant-service",
-      "port": 8082,
-      "check": {
-        "http": "http://restaurant_service:8082/api/tables/",
-        "interval": "10s",
-        "timeout": "3s"
-      }
-    },
-    {
-      "name": "reservation-service",
-      "port": 8083,
-      "check": {
-        "http": "http://reservation_service:8083/api/reservations/",
-        "interval": "10s",
-        "timeout": "3s"
-      }
-    },
-    {
       "name": "notification-worker",
       "port": 8084,
       "check": {
-        "http": "http://notification_worker:8084/health/",
+        "tcp": "notification_worker:8084",
         "interval": "10s",
         "timeout": "3s"
       }

@@ -4,13 +4,12 @@ services:
 
   # ─── Traefik ──────────────────────────────────────────────────────────────
   traefik:
-    image: traefik:v3.0
+    image: traefik:v2.10
     ports:
       - "80:80"
       - "8080:8080"
     volumes:
       - ./traefik.yml:/etc/traefik/traefik.yml
-      - /var/run/docker.sock:/var/run/docker.sock
 
   # ─── Consul ───────────────────────────────────────────────────────────────
   consul:
@@ -75,10 +74,12 @@ services:
       - "8081:8081"
     environment:
       DB_HOST: db_auth
+      DEBUG: "True"
       DB_NAME: auth_db
       DB_USER: postgres
       DB_PASSWORD: postgres
       SECRET_KEY: secret-auth
+      DB_PORT: "5432"
     depends_on:
       - db_auth
       - consul
@@ -92,12 +93,14 @@ services:
     build: ./restaurant-service
     ports:
       - "8082:8082"
-    environment:
+    environment: 
       DB_HOST: db_restaurant
+      DEBUG: "True"
       DB_NAME: restaurant_db
       DB_USER: postgres
       DB_PASSWORD: postgres
       SECRET_KEY: secret-restaurant
+      DB_PORT: "5432"
     depends_on:
       - db_restaurant
       - consul
@@ -112,12 +115,14 @@ services:
     ports:
       - "8083:8083"
     environment:
+      DEBUG: "True"
+      SECRET_KEY: secret-reservation
       DB_HOST: db_reservation
       DB_NAME: reservation_db
       DB_USER: postgres
       DB_PASSWORD: postgres
-      SECRET_KEY: secret-reservation
       RABBITMQ_HOST: rabbitmq
+      DB_PORT: "5432"
     depends_on:
       - db_reservation
       - rabbitmq
@@ -126,7 +131,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.reservation.rule=PathPrefix(`/api/reservations`)"
       - "traefik.http.services.reservation.loadbalancer.server.port=8083"
-
   # ─── Notification Worker ──────────────────────────────────────────────────
   notification_worker:
     build: ./notification-worker

@@ -1,18 +1,10 @@
-# Configuration générale
 api:
   dashboard: true
   insecure: true
 
-# Point d'entrée HTTP
 entryPoints:
   web:
     address: ":80"
 
-# Docker comme source de configuration
-providers:
-  docker:
-    exposedByDefault: false
-
-# Logs
 log:
   level: INFO
