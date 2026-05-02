@@ -4,7 +4,7 @@ import django
 import os
 import time
 import sys
-
+print("STARTED")
 # Indispensable : initialise Django avant d'utiliser les models
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'notification_worker.settings')
 django.setup()
