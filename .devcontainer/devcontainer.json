@@ -1,0 +1,14 @@
+{
+  "name": "Project AOS",
+  "forwardPorts": [8081, 8082, 8083, 8084, 3000, 5672, 15672, 8500, 8080],
+  "portsAttributes": {
+    "8081": {"visibility": "public", "label": "Auth Service"},
+    "8082": {"visibility": "public", "label": "Restaurant Service"},
+    "8083": {"visibility": "public", "label": "Reservation Service"},
+    "8084": {"visibility": "public", "label": "Notification Worker"},
+    "3000": {"visibility": "public", "label": "Frontend"},
+    "15672": {"visibility": "public", "label": "RabbitMQ"},
+    "8500": {"visibility": "public", "label": "Consul"},
+    "8080": {"visibility": "public", "label": "Traefik"}
+  }
+}
