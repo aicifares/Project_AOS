@@ -91,15 +91,17 @@ function register() {
     .then(res => res.json())
     .then(data => {
         if (data.status === "success") {
-            window.location.href = "login.html";
-        } else {
-            let errorMsg = data.message || "";
-            if (!errorMsg) {
-                const firstKey = Object.keys(data)[0];
-                errorMsg = data[firstKey][0];
+            localStorage.setItem("access", data.data.access);
+            localStorage.setItem("refresh", data.data.refresh);
+            localStorage.setItem("role", data.data.role);
+            localStorage.setItem("user_id", data.data.user_id);
+
+            // Redirection selon le rôle
+            if (data.data.role === "ADMIN") {
+                window.location.href = "http://localhost:3000/admin_table.html";
+            } else {
+                window.location.href = "http://localhost:3000/index.html";
             }
-            document.getElementById("message").innerText = errorMsg;
-        }
     })
     .catch(() => {
         document.getElementById("message").innerText = "Connection error";
@@ -126,7 +128,11 @@ function login() {
         if (data.status === "success") {
             localStorage.setItem("access", data.data.access);
             localStorage.setItem("refresh", data.data.refresh);
-            window.location.href = "dashboard.html";
+            if (data.data.role === "ADMIN") {
+            window.location.href = "http://localhost:8083/dashboard-admin.html";
+           } else {
+              window.location.href = "dashboard.html";
+            }
         } else {
             document.getElementById("message").innerText = data.message || "Login failed";
         }
@@ -174,13 +180,12 @@ function getUser() {
         });
 }
 
-// ── NAVIGATION ──
 function goToTables() {
-    alert("Tables service — implemented by another microservice");
+    window.location.href = "http://localhost:3000/index.html";
 }
 
 function goToReservations() {
-    alert("Reservation service — implemented by another microservice");
+    window.location.href = "http://localhost:8083/dashboard_client.html";
 }
 
 // ── SIDEBAR / DROPDOWN ──
