@@ -1,5 +1,6 @@
-const API_URL = "http://127.0.0.1:8081/auth";
-
+const API_URL = "https://symmetrical-garbanzo-wr5pqv69gqv7f96xx-8081.app.github.dev/auth";
+const FRONTEND_URL = "https://symmetrical-garbanzo-wr5pqv69gqv7f96xx-3000.app.github.dev";
+const RESERVATION_URL = "https://symmetrical-garbanzo-wr5pqv69gqv7f96xx-8083.app.github.dev";
 // ── TOKEN REFRESH ──
 async function refreshAccessToken() {
     const refresh = localStorage.getItem("refresh");
@@ -129,10 +130,10 @@ function login() {
             localStorage.setItem("access", data.data.access);
             localStorage.setItem("refresh", data.data.refresh);
             if (data.data.role === "ADMIN") {
-            window.location.href = "http://localhost:8083/dashboard-admin.html";
-           } else {
-              window.location.href = "dashboard.html";
-            }
+              window.location.href = RESERVATION_URL + "/dashboard-admin.html";
+            } else {
+                     window.location.href = "dashboard.html";
+                   }
         } else {
             document.getElementById("message").innerText = data.message || "Login failed";
         }
@@ -181,13 +182,12 @@ function getUser() {
 }
 
 function goToTables() {
-    window.location.href = "http://localhost:3000/index.html";
+    window.location.href = FRONTEND_URL + "/index.html";
 }
 
 function goToReservations() {
-    window.location.href = "http://localhost:8083/dashboard_client.html";
+    window.location.href = RESERVATION_URL + "/dashboard_client.html";
 }
-
 // ── SIDEBAR / DROPDOWN ──
 function toggleSidebar() {
     const sidebar  = document.getElementById('sidebar');

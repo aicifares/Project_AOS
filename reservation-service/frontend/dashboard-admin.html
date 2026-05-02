@@ -156,10 +156,10 @@
 </div>
 
 <script>
-    const API = "http://localhost:8083/api/reservations";
+    const API = "https://symmetrical-garbanzo-wr5pqv69gqv7f96xx-8083.app.github.dev/api/reservations";
     const token = localStorage.getItem("access");
 
-    if (!token) window.location.href = "http://localhost:8081/auth/login.html";
+    if (!token) window.location.href = "https://symmetrical-garbanzo-wr5pqv69gqv7f96xx-8081.app.github.dev/auth/login.html";
 
     async function chargerReservations() {
         const date = document.getElementById("filter-date").value;
