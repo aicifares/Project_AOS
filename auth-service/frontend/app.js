@@ -84,7 +84,7 @@ function register() {
         return;
     }
 
-    fetch(`${API_URL}/register`, {
+    fetch(`${API_URL}/register/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ first_name, last_name, email, password })
@@ -117,7 +117,7 @@ function login() {
         return;
     }
 
-    fetch(`${API_URL}/login`, {
+    fetch(`${API_URL}/login/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
