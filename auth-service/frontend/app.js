@@ -1,5 +1,6 @@
-const API_URL = "http://127.0.0.1:8081/auth";
-
+const API_URL = "https://symmetrical-garbanzo-wr5pqv69gqv7f96xx-8081.app.github.dev/auth";
+const FRONTEND_URL = "https://symmetrical-garbanzo-wr5pqv69gqv7f96xx-3000.app.github.dev";
+const RESERVATION_URL = "https://symmetrical-garbanzo-wr5pqv69gqv7f96xx-8083.app.github.dev";
 // ── TOKEN REFRESH ──
 async function refreshAccessToken() {
     const refresh = localStorage.getItem("refresh");
@@ -91,15 +92,17 @@ function register() {
     .then(res => res.json())
     .then(data => {
         if (data.status === "success") {
-            window.location.href = "login.html";
-        } else {
-            let errorMsg = data.message || "";
-            if (!errorMsg) {
-                const firstKey = Object.keys(data)[0];
-                errorMsg = data[firstKey][0];
+            localStorage.setItem("access", data.data.access);
+            localStorage.setItem("refresh", data.data.refresh);
+            localStorage.setItem("role", data.data.role);
+            localStorage.setItem("user_id", data.data.user_id);
+
+            // Redirection selon le rôle
+            if (data.data.role === "ADMIN") {
+                window.location.href = "http://localhost:3000/admin_table.html";
+            } else {
+                window.location.href = "http://localhost:3000/index.html";
             }
-            document.getElementById("message").innerText = errorMsg;
-        }
     })
     .catch(() => {
         document.getElementById("message").innerText = "Connection error";
@@ -126,7 +129,11 @@ function login() {
         if (data.status === "success") {
             localStorage.setItem("access", data.data.access);
             localStorage.setItem("refresh", data.data.refresh);
-            window.location.href = "dashboard.html";
+            if (data.data.role === "ADMIN") {
+              window.location.href = RESERVATION_URL + "/dashboard-admin.html";
+            } else {
+                     window.location.href = "dashboard.html";
+                   }
         } else {
             document.getElementById("message").innerText = data.message || "Login failed";
         }
@@ -174,15 +181,13 @@ function getUser() {
         });
 }
 
-// ── NAVIGATION ──
 function goToTables() {
-    alert("Tables service — implemented by another microservice");
+    window.location.href = FRONTEND_URL + "/index.html";
 }
 
 function goToReservations() {
-    alert("Reservation service — implemented by another microservice");
+    window.location.href = RESERVATION_URL + "/dashboard_client.html";
 }
-
 // ── SIDEBAR / DROPDOWN ──
 function toggleSidebar() {
     const sidebar  = document.getElementById('sidebar');
